@@ -1,7 +1,3 @@
-import os
-
-import pytest
-
 from kubeconfig import kubectl
 
 

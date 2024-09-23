@@ -1,12 +1,15 @@
 *.pyc
 *.pyo
 
+**/.DS_Store
 .coverage
 kubeconfig.egg-info/
 .cache/
 .eggs/
+.pytest_cache/
 build/
 dist/
 tests/tmp_fixtures/
+**/__pycache__
 
 docs/_build

@@ -1,18 +1,19 @@
 import subprocess
 
-import distutils.spawn
+from shutil import which
 
 from . import exceptions
 
 
 def run(kubeconfig=None, subcmd_args=None):
-    """
+    """Run a kubectl command.
+
     :param kubeconfig:
     :param subcmd_args:
     :raise: KubectlCommandError when kubectl exits with an error.
     :rtype: bytes
     """
-    if not distutils.spawn.find_executable("kubectl"):
+    if not which("kubectl"):
         raise exceptions.KubectlNotFoundError
 
     args = ["kubectl"]

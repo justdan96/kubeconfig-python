@@ -1,18 +1,21 @@
 SHELL := /bin/bash
 
-.PHONY: tests tidy docs clean
+.PHONY: tests tidy docs build
 
 tests:
-	py.test
+	poetry run pytest -v
 
 tidy: tests
-	pep8 kubeconfig tests
-	pyflakes kubeconfig tests
-	pep257 kubeconfig
-	pylint kubeconfig
+	poetry run pycodestyle kubeconfig tests
+	poetry run pyflakes kubeconfig tests
+	poetry run pydocstyle kubeconfig
+	poetry run pylint kubeconfig
 
 docs:
 	pushd docs && make html && popd
+
+build:
+	poetry build
 
 clean:
 	rm -rf build/
@@ -20,3 +23,5 @@ clean:
 	rm -rf .cache/
 	rm -rf tests/htmlcov/
 	rm -rf docs/_build
+	rm -rf .pytest_cache
+	rm -rf .eggs
