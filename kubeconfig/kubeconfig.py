@@ -22,8 +22,8 @@ from . import kubectl
 
 
 class KubeConfig(object):
-    """
-    This is the top-level class for manipulating your kubeconfig file.
+    """This is the top-level class for manipulating your kubeconfig file.
+
     You may view or make changes using the exposed methods. Changes take
     effect immediately.
 
@@ -36,10 +36,12 @@ class KubeConfig(object):
     """
 
     def __init__(self, path=None):
+        """Initialise."""
         self.path = path
 
     def _bool_to_cli_str(self, bool_arg):
-        """
+        """Convert boolean argument to CLI string.
+
         :param bool bool_arg: A boolean value.
         :rtype: str
         :return: The CLI form of the boolean. IE: 'false', 'true'.
@@ -49,7 +51,8 @@ class KubeConfig(object):
         return repr(bool_arg).lower()
 
     def _run_kubectl_config(self, *args):
-        """
+        """Invoke kubectl sub-commands.
+
         This convenience method is for invoking kubectl sub-commands and
         retrieving the resulting stdout/stderr.
 
@@ -62,7 +65,8 @@ class KubeConfig(object):
         return kubectl.run(kubeconfig=self.path, subcmd_args=subcmd_args)
 
     def current_context(self):
-        """
+        """Retrieve current context.
+
         :rtype: str or None
         :return: Your config's currently selected context (``current-context``),
             or ``None`` if not set.
@@ -71,8 +75,7 @@ class KubeConfig(object):
         return current_context if current_context else None
 
     def delete_cluster(self, name):
-        """
-        Deletes a cluster entry from your config.
+        """Delete a cluster entry from your config.
 
         :param str name: The name of the cluster to delete from your config.
         :raise: :py:exc:`KubectlCommandError <kubeconfig.exceptions.KubectlCommandError>`
@@ -81,18 +84,16 @@ class KubeConfig(object):
         self._run_kubectl_config('delete-cluster', name)
 
     def delete_context(self, name):
-        """
-        Deletes a context entry from your config.
+        """Delete a context entry from your config.
 
         :param str name: The name of the context to delete from your config.
-        :raise: :py:exc:`KubectlCommandError <kubeconfig.exceptions.KubectlCommandError>` 
+        :raise: :py:exc:`KubectlCommandError <kubeconfig.exceptions.KubectlCommandError>`
             when an invalid context name is specified.
         """
         self._run_kubectl_config('delete-context', name)
 
     def rename_context(self, old_name, new_name):
-        """
-        Changes the name of a context in your config.
+        """Change the name of a context in your config.
 
         :param str old_name: The name of the context to rename.
         :param str new_name: The desired new name for the context.
@@ -102,8 +103,7 @@ class KubeConfig(object):
         self._run_kubectl_config('rename-context', old_name, new_name)
 
     def set(self, name, value):
-        """
-        Sets an individual value in your config.
+        """Set an individual value in your config.
 
         :param str name: The dot delimited name of the key to set.
         :param value: The value to set on the key.
@@ -114,10 +114,10 @@ class KubeConfig(object):
 
     def set_cluster(self, name, certificate_authority=None, embed_certs=None,
                     insecure_skip_tls_verify=None, server=None):
-        """
-        Creates or updates a cluster entry in your config. In the case where
-        you are updating an existing cluster, only the optional keyword args
-        that you pass in will be updated on the entry.
+        """Create or update a cluster entry in your config.
+
+        In the case where you are updating an existing cluster, only the
+        optional keyword args that you pass in will be updated on the entry.
 
         :param str name: The name of the cluster to modify.
         :param str certificate_authority: Path to a certificate authority
@@ -143,10 +143,10 @@ class KubeConfig(object):
         self._run_kubectl_config('set-cluster', name, *flags)
 
     def set_context(self, name, cluster=None, namespace=None, user=None):
-        """
-        Creates or updates a context entry in your config. In the case where
-        you are updating an existing context, only the optional keyword args
-        that you pass in will be updated on the entry.
+        """Create or update a context entry in your config.
+
+        In the case where you are updating an existing context, only the
+        optional keyword args that you pass in will be updated on the entry.
 
         :param str name: The name of the context to modify.
         :param str cluster: Determines the context's cluster.
@@ -166,8 +166,8 @@ class KubeConfig(object):
                         client_certificate=None, client_key=None,
                         embed_certs=None, password=None, token=None,
                         username=None):
-        """
-        Creates or updates a ``user`` entry under the ``users`` entry.
+        """Create or update a ``user`` entry under the ``users`` entry.
+
         In the case where you are updating an existing user, only the optional
         keyword args that you pass in will be updated on the entry.
 
@@ -210,8 +210,7 @@ class KubeConfig(object):
         self._run_kubectl_config('set-credentials', name, *flags)
 
     def unset(self, name):
-        """
-        Unsets an individual value in your kubeconfig file.
+        """Unset an individual value in your kubeconfig file.
 
         :param str name: The dot delimited name of the key to unset.
         :raise: :py:exc:`KubectlCommandError <kubeconfig.exceptions.KubectlCommandError>`
@@ -220,8 +219,7 @@ class KubeConfig(object):
         self._run_kubectl_config('unset', name)
 
     def use_context(self, name):
-        """
-        Changes your default/active context.
+        """Change your default/active context.
 
         :param str name: The context to set as current.
         :raise: :py:exc:`KubectlCommandError <kubeconfig.exceptions.KubectlCommandError>`
@@ -230,7 +228,8 @@ class KubeConfig(object):
         self._run_kubectl_config('use-context', name)
 
     def view(self):
-        """
+        """View entire kubeconfig file.
+
         :rtype: dict
         :return: A dict representing your full kubeconfig file, after all
             merging has been done.

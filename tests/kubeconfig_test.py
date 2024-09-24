@@ -65,7 +65,7 @@ def test_delete_cluster():
     kc = kubeconfig.KubeConfig(_copy_sample('simple-complete.config'))
     assert len(kc.view()['clusters']) == 1
     kc.delete_cluster('test-cluster')
-    assert len(kc.view()['clusters']) == 0
+    assert kc.view()['clusters'] is None or len(kc.view()['clusters']) == 0
 
 
 #
@@ -85,7 +85,7 @@ def test_delete_context():
     kc = kubeconfig.KubeConfig(_copy_sample('simple-complete.config'))
     assert len(kc.view()['contexts']) == 1
     kc.delete_context('test-context')
-    assert len(kc.view()['contexts']) == 0
+    assert kc.view()['contexts'] is None or len(kc.view()['contexts']) == 0
 
 
 #
@@ -267,6 +267,6 @@ def test_view_empty_config():
     kc = kubeconfig.KubeConfig('this-does-not-exist.config')
     config = kc.view()
 
-    assert type(config) == dict
+    assert type(config) is dict
     # Quick sanity check to make sure we've got a minimal doc coming through.
     assert 'apiVersion' in config
